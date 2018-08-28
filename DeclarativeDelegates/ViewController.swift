@@ -13,20 +13,23 @@ class ViewController: UIViewController {
     @IBOutlet weak var tfFirstName: UITextField!
     
     @IBOutlet weak var tfLastName: UITextField!
-    //this var is REQUIRED to remain in memory during life of tfFirstName
+    //this var is REQUIRED to remain in memory during life of tfFirstName and all other textFields this is made delegate of
     var textFieldDelegate : MasterDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         textFieldDelegate = MasterDelegate(didBeginBlock:
-        {
+        { [weak self]
             (_ tf) in
             print("Begin editing: \(String(describing: tf.text))")
         }, didEndBlock: {
+          [weak self]
             (_ tf) in
             print("end editing: \(String(describing: tf.text))")
-        }, shouldChangeBlock: { (_ tf, range, str) -> Bool in
+        }, shouldChangeBlock: {
+           [weak self]
+            (_ tf, range, str) -> Bool in
             print("change: \(String(describing: str))")
             return true
         })
